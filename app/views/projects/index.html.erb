@@ -1,0 +1,32 @@
+<p style="color: green"><%= notice %></p>
+<% if user_signed_in? %><%= button_to  'Logout', destroy_user_session_path, method: :delete,class: 'btn' %>
+<% else %><%= link_to 'Sign up', new_user_registration_path %> <%= link_to 'Login', new_user_session_path %><% end %>
+<h4>User: <%= current_user.usertype%></h4>
+<label for="user_id">Select Project:</label>
+<%= select_tag 'user_id', options_for_select(@projects.map { |u| [u.name, u.id] }, prompt: "Select Project"), id: 'projects' %>
+<br>
+
+<h1>Projects</h1>
+<%= link_to "New project", new_project_path %><br><br>
+<div id="projects">
+ 
+ 
+  <% @projects.each do |project| %>
+    <table border="1">
+      <tr>
+         <th>Project Name</th>
+         <th>Action</th>
+      </tr>
+      <tr>
+        <td><%= project.name %></td>
+        <td><%= link_to "Show ", project  %></td>        
+      </tr>
+    </table>
+
+      <hr>
+  <% end %>
+</div>
+
+
+
+

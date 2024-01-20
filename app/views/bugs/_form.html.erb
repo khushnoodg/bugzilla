@@ -1,0 +1,59 @@
+<%= form_with(model: bug) do |form| %>
+  <% if bug.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(bug.errors.count, "error") %> prohibited this bug from being saved:</h2>
+
+      <ul>
+        <% bug.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if policy(Bug).status? %>
+  <%= form.label :b_type %>
+  <%= form.select :b_type, ['feature', 'bug'] %><br>
+    <%= form.label :status %>
+    <%= form.select :status, ['new', 'started', 'completed'] %><br><br>
+
+  <div>
+  <%= form.hidden_field :developer_id, value: current_user.id %>
+</div>
+  <%else%>
+  
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div>
+    <%= form.label :deadline, style: "display: block" %>
+    <%= form.date_field :deadline %>
+  </div>
+  <%= form.label :b_type %>
+  <%= form.select :b_type, ['feature', 'bug'] %><br>
+    <%= form.label :status %>
+    <%= form.select :status, ['new', 'started', 'completed'] %><br><br> 
+
+  <div>
+   <%= form.hidden_field :project_id %>
+  </div>
+
+  <div>
+    <%= form.hidden_field :creater_id %>
+  </div>
+
+  <div>
+    <%= form.hidden_field :developer_id, value: current_user.id  %>
+  </div>
+  <% end %>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
+

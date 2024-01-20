@@ -1,0 +1,118 @@
+<div id="<%= dom_id project %>">
+<% if current_user.usertype=="manager" %>
+<h3> ----------------------------------Welcome Manager----------------------------------- </h3>
+<%end %>
+<% if current_user.usertype=="developer" %>
+<h3> ----------------------------------Welcome Developer----------------------------------- </h3>
+<%end %>
+<% if current_user.usertype=="qa" %>
+<h3> ----------------------------------Welcome QA----------------------------------- </h3>
+<%end %>
+<h2>Project </h2>
+  <table border="1">
+        <tr>
+        <th>NAME</th>
+        <th> Developer/QA </th>
+        <th> Action </th>
+        </tr>
+  <tr>
+  
+    <td><%= project.name %></td>
+    <td>
+    <table border="1">
+ 
+      <% project.project_users.each do |task| %>
+        <tr>
+          <td> <%= User.find(task.user_id).username %>-<%= User.find(task.user_id).usertype %> </td>
+             </td>
+        </tr>
+      <% end %>
+      
+    </table></td>
+    <td>
+    <%= link_to "Edit", edit_project_path(@project) %><%=button_to "Destroy", @project, method: :delete %></td>
+    
+  
+    
+  </tr>
+
+</table><br>
+
+</div>
+
+<div>
+<h2>Project Bugs </h2>
+<table border="1">
+<div>
+
+  <tr>
+    <th> Title </th>
+    <th> Description </th>
+    <th> Bug Type </th>
+    <th> Status </th>
+    <th> Image </th>
+    <th> Deadline </th>
+    <th> Creater Name</th>
+    <% if policy(Bug).hide_tag? %>
+    <th> Developer_Name </th>
+    <%end%>
+    <th> Action </th>
+  </tr>
+  <%   @project.bugs.each do |bug|%>  
+   <tr>
+     <td> <%= bug.title %></td>
+
+
+     <td> <%= bug.description %></td>
+
+     <td> <%= bug.b_type %></td>
+
+     <td>  <%= bug.status %></td>
+
+     <td> <% if bug.image.present? %><%= image_tag bug.image, size: "70x50"  %>
+<% else %>
+click on show to see image 
+<% end %></td>
+
+<td>  <%= bug.deadline %></td>
+
+<td><%= User.find(bug.creater_id).username %></td>
+<% if policy(Bug).hide_tag? %>
+<td>  <%= User.find(bug.developer_id).username %></td>
+<%end%>
+<td><%= link_to "Edit", edit_bug_path(bug)%>|<%= link_to "Delete",[bug.project,bug],
+data:{
+  turbo_method: :delete,
+  turbo_confirm: "Are you sure?"
+} %><br></td>
+  </tr>
+<% end %>
+</div>
+</div>
+</table>
+<hr>
+<% if policy(Bug).hide_tag? %>
+<h1>Add Bugs</h1>
+
+<%= form_with model:[@project,@project.bugs.build] do |form| %>
+    <%= form.label :title%>
+    <%= form.text_field :title %>
+    <%= form.label :description%>
+    <%= form.text_field :description %>
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  <%= form.label :b_type %>
+  <%= form.select :b_type, ['feature', 'bug'], id: 'bug_type'  %>
+    <%= form.label :status %>
+    <%= form.select :status, ['new', 'started', 'completed'], id: 'status' %><br><br>
+    <%= form.label :deadline%>
+    <%= form.date_field :deadline %>
+    <%= form.hidden_field :project_id %>
+    <%= form.hidden_field :developer_id, value: project.project_users.first.user_id  %>
+
+ 
+<br><br>
+    <%= form.submit %>
+ 
+<% end %>
+<% end %>

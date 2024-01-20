@@ -1,0 +1,50 @@
+<div id="<%= dom_id bug %>">
+  <p>
+    <strong>Title:</strong>
+    <%= bug.title %>
+  </p>
+
+  <p>
+    <strong>Description:</strong>
+    <%= bug.description %>
+  </p>
+
+  <p>
+    <strong>B type:</strong>
+    <%= bug.b_type %>
+  </p>
+
+  <p>
+    <strong>Status:</strong>
+    <%= bug.status %>
+  </p>
+  <p>
+  <strong>Image:</strong>
+  <% if @bug && @bug.image.present? %>
+  <%= image_tag @bug.image %>
+<% else %>
+  click on show to see image 
+<% end %>
+  </p>
+
+  <p>
+    <strong>Deadline:</strong>
+    <%= bug.deadline %>
+  </p>
+
+  <p>
+    <strong>Project:</strong>
+    <%= bug.project_id %>
+  </p>
+
+  <p>
+    <strong>Creater:</strong>
+    <%= bug.creater_id %>
+  </p>
+
+  <p>
+    <strong>Developer:</strong>
+    <%= bug.developer_id %>
+  </p>
+
+</div>
